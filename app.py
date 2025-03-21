@@ -1,4 +1,6 @@
 from flask import Flask,request,render_template
+import sqlite3
+import datetime2
 
 app = Flask(__name__)
 
@@ -31,6 +33,19 @@ def test_result():
         return(render_template("pass.html"))
     elif answer=="true":
         return(render_template("fail.html"))
+
+@app.route("/userLog",methods=["POST","GET"])
+def userLog():
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor
+    c.execute('select * from user')
+    r = '' 
+    for row in c:
+        r = r + str(row) + "\n"
+    print(r)
+    c.close()
+    conn.close
+    return(render_template("userLog.html"))
 
 if __name__ == "__main__":
     app.run()
